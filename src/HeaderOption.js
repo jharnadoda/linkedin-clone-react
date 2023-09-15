@@ -1,13 +1,18 @@
 import React from 'react'
 import './HeaderOption.css'
 import { Avatar } from '@mui/material'
+import { useSelector } from 'react-redux'
+import { selectUser } from './features/userSlice'
 
-function HeaderOption({avatar, Icon, title}) { //icon,title are props
+function HeaderOption({avatar, Icon, title, OnClick}) { //icon,title are props
+  const user=useSelector(selectUser);
   return (
-    <div className='HeaderOption'>
+    <div onClick={OnClick} className='HeaderOption'>
         {Icon && <Icon className='headerOption__icon'/>} 
         {/* if icon is passed then only icon will be rendered. Thats what && signifies. If then */}
-        {avatar && <Avatar className='headerOption__icon' src={avatar}/>}
+        {avatar && <Avatar className='headerOption__icon' src={user?.photoUrl}>
+          {user?.email[0]}
+          </Avatar>}
         <h3 className='headerOption__title'>{title}</h3>
       
     </div>

@@ -4,9 +4,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import { BusinessCenter, Chat, Home, LinkedIn, SupervisorAccount, Notifications } from '@mui/icons-material';
 import HeaderOption from './HeaderOption';
 import { Avatar } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
+import { auth } from './firebase';
+import { logout, selectUser } from './features/userSlice';
 
 
 function Header() {
+
+  // const user= useSelector(selectUser);
+  const dispatch = useDispatch();
+  const logoutOfApp =() => {
+    dispatch(logout());
+    auth.signOut();
+  };
   return (
     <div className='header'>
 
@@ -16,7 +26,7 @@ function Header() {
      {/* <img src="https://www.flaticon.com/svg/static/icons/svg/174/174857.svg" alt="linkedinlogo" /> */}
      <div className='header__search'>
       <SearchIcon/>
-      <input type='text'/>
+      <input placeholder='Search' type='text'/>
       {/*SearchIcon*/ }
      </div>
       </div>
@@ -27,7 +37,7 @@ function Header() {
         <HeaderOption Icon={BusinessCenter} title="Jobs" />
         <HeaderOption Icon={Chat} title="Messaging" />
         <HeaderOption Icon={Notifications} title="Notifications" />
-        <HeaderOption avatar="https://picsum.photos/200/300?grayscale" title="me" />
+        <HeaderOption avatar={true} title="me" OnClick={logoutOfApp} />
 
 
       </div>

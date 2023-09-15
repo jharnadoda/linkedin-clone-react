@@ -3,6 +3,7 @@ import './Feed.css';
 import React, { useState, useEffect } from 'react'
 import InputOption from './InputOption.js';
 import Post from './Post';
+import FlipMove from 'react-flip-move';
 
 
 import { CalendarViewDay, Edit, EventNote, Image, Subscriptions } from '@mui/icons-material';
@@ -11,9 +12,12 @@ import { db } from './firebase';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { useSelector } from 'react-redux';
+import { selectUser } from './features/userSlice';
 
 
 function Feed() {
+  const user=useSelector(selectUser);
   const [input, setInput]=useState('');
   // this is state, hooks
   const [posts, setPosts] =useState([]); 
@@ -35,10 +39,10 @@ function Feed() {
     e.preventDefault(); //now it wont refresh when we hit enter on new post
 
     db.collection('posts').add({
-      name: 'Jharna Doda',
-      description: 'testing',
+      name: user.displayName,
+      description: user.email,
       message:input,
-      photoUrl: '',
+      photoUrl: user.photoUrl || user.email[0],
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
     setInput("");
@@ -62,6 +66,7 @@ function Feed() {
           
         </div>
       </div>
+      <FlipMove>
       {posts.map(({id,data:{ name ,description, message, photoUrl}}) => (
         <Post
         key={id}
@@ -71,6 +76,8 @@ function Feed() {
         photoUrl={photoUrl}
        />
       ))}
+      </FlipMove>
+      
       {/* <Post name='Jharna Doda' description="Test" message='WOW this worked' photoUrl='www'/> */}
     </div>
   )
